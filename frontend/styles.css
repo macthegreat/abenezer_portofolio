@@ -1,0 +1,99 @@
+:root {
+  --bg: #0b1020;
+  --card: #121a30;
+  --text: #e9ecf7;
+  --muted: #98a2c2;
+  --primary: #4e8cff;
+  --danger: #e25555;
+  --success: #29b576;
+  --line: #2a3559;
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  background: linear-gradient(120deg, #080d1a 0%, #131d37 100%);
+  color: var(--text);
+}
+
+.app-shell { max-width: 1080px; margin: 0 auto; padding: 20px; }
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+.topbar h1 { margin: 0; }
+.topbar p { margin: 4px 0 0; color: var(--muted); }
+.api-config { min-width: 320px; }
+
+label { display: block; font-size: 12px; color: var(--muted); margin-bottom: 6px; }
+input, select {
+  width: 100%;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: #0e162a;
+  color: var(--text);
+}
+
+.card {
+  background: rgba(18, 26, 48, 0.95);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+.card-head { display:flex; justify-content:space-between; align-items:center; }
+
+button {
+  margin-top: 12px;
+  background: var(--primary);
+  color: white;
+  border: 0;
+  border-radius: 10px;
+  padding: 10px 14px;
+  cursor: pointer;
+  font-weight: 600;
+}
+button.secondary { background: #3f4a71; }
+button.danger { background: var(--danger); }
+button.success { background: var(--success); }
+
+.grid { display: grid; gap: 12px; margin-top: 8px; }
+.grid.two { grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); }
+.grid.three { grid-template-columns: repeat(auto-fit, minmax(180px,1fr)); }
+
+.badge {
+  display: inline-block;
+  margin: 10px 0;
+  background: #243260;
+  border: 1px solid #3b4f88;
+  color: #cdd8ff;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+}
+
+pre {
+  min-height: 150px;
+  max-height: 320px;
+  overflow: auto;
+  background: #0c1325;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 10px;
+  color: #c8d2f0;
+  white-space: pre-wrap;
+}
+
+.hidden { display: none; }
+.block { margin: 10px 0 18px; border-top: 1px dashed var(--line); padding-top: 10px; }
+.bootstrap { margin-top: 12px; }
+
+@media (max-width: 800px) {
+  .topbar { flex-direction: column; align-items: stretch; }
+  .api-config { min-width: 0; }
+}
