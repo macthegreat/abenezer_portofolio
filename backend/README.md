@@ -17,7 +17,7 @@ Production-oriented backend for:
 
 ## What's production-ready now
 
-- Request validation middleware for all write endpoints and report windows
+- Request validation middleware for all write endpoints and report windows (amount must be numeric)
 - Transactional writes for multi-step operations
 - Structured API errors (validation + mapped PostgreSQL constraint errors)
 - Security middleware: `helmet`, CORS policy, rate limiting

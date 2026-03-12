@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS registrations (
   officer_id BIGINT NOT NULL REFERENCES officers(id) ON DELETE RESTRICT,
   full_name VARCHAR(120) NOT NULL,
   idno VARCHAR(50) NOT NULL UNIQUE CHECK (idno ~ '^\\d{12}$'),
-  amount NUMERIC(12,2) NOT NULL CHECK (amount >= 1000),
+  amount NUMERIC(12,2) NOT NULL,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 

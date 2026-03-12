@@ -15,7 +15,7 @@ function isValidPassword(value) {
 
 function isValidAmount(value) {
   const amount = Number(value);
-  return Number.isFinite(amount) && amount >= 1000;
+  return Number.isFinite(amount);
 }
 
 function isValidWindow(value) {
@@ -79,7 +79,7 @@ export function validateRegistration(req, _res, next) {
   const { fullName, idno, amount } = req.body;
   ensure(isNonEmptyString(fullName, 1, 120), 'Full name must be between 1 and 120 characters.');
   ensure(isValidIdno(idno), 'IDNO(FIN) must be exactly 12 digits.');
-  ensure(isValidAmount(amount), 'Amount must be a number greater than or equal to 1000.');
+  ensure(isValidAmount(amount), 'Amount must be a valid number.');
   next();
 }
 

@@ -33,9 +33,9 @@ test('validateLogin rejects invalid email', async () => {
   }));
 });
 
-test('validateRegistration rejects amount lower than 1000', async () => {
-  await assert.rejects(() => runMiddleware(validateRegistration, {
-    body: { fullName: 'John Doe', idno: 'FIN12345', amount: 999 }
+test('validateRegistration accepts amount lower than previous threshold', async () => {
+  await assert.doesNotReject(() => runMiddleware(validateRegistration, {
+    body: { fullName: 'John Doe', idno: '123456789012', amount: 100 }
   }));
 });
 
