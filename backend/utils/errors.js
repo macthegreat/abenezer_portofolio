@@ -26,13 +26,14 @@ export function mapDatabaseError(error) {
   if (!error?.code) return null;
 
   if (error.code === '23505') {
-    const isIdnoConflict = error.constraint?.includes('registrations_idno_key');
+    const isRegistrationIdnoConflict = error.constraint?.includes('registrations_idno_key');
+    const isSubmissionIdnoConflict = error.constraint?.includes('agent_submissions_idno_key');
     const isEmailConflict = error.constraint?.includes('users_email_key');
-    const message = isIdnoConflict
-      ? 'A registration with this IDNO already exists.'
-      : isEmailConflict
-        ? 'This email is already registered.'
-        : 'Duplicate value violates unique constraint.';
+
+    let message = 'Duplicate value violates unique constraint.';
+    if (isRegistrationIdnoConflict) message = 'A registration with this IDNO already exists.';
+    if (isSubmissionIdnoConflict) message = 'This IDNO has already been submitted by another agent.';
+    if (isEmailConflict) message = 'This email is already registered.';
 
     return new AppError(409, message, {
       constraint: error.constraint,

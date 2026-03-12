@@ -18,6 +18,8 @@ const el = {
   dashboardTitle: document.getElementById('dashboardTitle'),
   dashboardBody: document.getElementById('dashboardBody'),
   roleBadge: document.getElementById('roleBadge'),
+  lookupIdno: document.getElementById('lookupIdno'),
+  lookupBtn: document.getElementById('lookupBtn'),
   logoutBtn: document.getElementById('logoutBtn'),
   output: document.getElementById('output')
 };
@@ -58,6 +60,20 @@ function makeInput(label, id, type = 'text', placeholder = '') {
   return `<div><label>${label}</label><input id="${id}" type="${type}" placeholder="${placeholder}" /></div>`;
 }
 
+function bindGlobalLookup() {
+  el.lookupBtn.onclick = async () => {
+    const idno = el.lookupIdno.value.trim();
+    if (!idno) return log({ message: 'Enter an IDNO first.' }, 'Lookup');
+
+    try {
+      const data = await api(`/lookup/idno/${encodeURIComponent(idno)}`);
+      log(data, 'IDNO lookup');
+    } catch (error) {
+      log({ message: error.message }, 'Lookup failed');
+    }
+  };
+}
+
 function renderSupervisor() {
   el.dashboardBody.innerHTML = `
     <div class="block">
@@ -91,8 +107,11 @@ function renderSupervisor() {
     </div>
 
     <div class="block">
-      <h3>Supervisor reports</h3>
-      <button id="supervisorReportBtn" class="secondary">Load reports</button>
+      <h3>Team and reports</h3>
+      <div class="grid two">
+        <button id="supervisorTeamBtn" class="secondary">Load team</button>
+        <button id="supervisorReportBtn" class="secondary">Load reports</button>
+      </div>
     </div>
   `;
 
@@ -126,6 +145,12 @@ function renderSupervisor() {
         commissionPerPerson: Number(document.getElementById('updateCommission').value)
       });
       log(data, 'Commission updated');
+    } catch (error) { log({ message: error.message }, 'Error'); }
+  };
+
+  document.getElementById('supervisorTeamBtn').onclick = async () => {
+    try {
+      log(await api('/supervisor/team'), 'Team roster');
     } catch (error) { log({ message: error.message }, 'Error'); }
   };
 
@@ -286,4 +311,5 @@ el.logoutBtn.onclick = () => {
   log({ message: 'Logged out.' }, 'Session');
 };
 
+bindGlobalLookup();
 renderDashboard();

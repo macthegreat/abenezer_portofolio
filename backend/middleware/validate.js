@@ -22,6 +22,10 @@ function isValidWindow(value) {
   return ['daily', 'weekly', 'monthly'].includes(value);
 }
 
+function isValidIdno(value) {
+  return typeof value === 'string' && /^[A-Za-z0-9-]{3,50}$/.test(value.trim());
+}
+
 function ensure(condition, message, details) {
   if (!condition) throw badRequest(message, details);
 }
@@ -67,19 +71,24 @@ export function validateCommissionUpdate(req, _res, next) {
 export function validateAgentSubmission(req, _res, next) {
   const { fullName, idno } = req.body;
   ensure(isNonEmptyString(fullName, 2, 120), 'Full name must be between 2 and 120 characters.');
-  ensure(isNonEmptyString(idno, 3, 50), 'IDNO must be between 3 and 50 characters.');
+  ensure(isValidIdno(idno), 'IDNO must be 3-50 chars and only letters, numbers, or hyphen.');
   next();
 }
 
 export function validateRegistration(req, _res, next) {
   const { fullName, idno, amount } = req.body;
   ensure(isNonEmptyString(fullName, 2, 120), 'Full name must be between 2 and 120 characters.');
-  ensure(isNonEmptyString(idno, 3, 50), 'IDNO must be between 3 and 50 characters.');
+  ensure(isValidIdno(idno), 'IDNO must be 3-50 chars and only letters, numbers, or hyphen.');
   ensure(isValidAmount(amount), 'Amount must be a number greater than or equal to 1000.');
   next();
 }
 
 export function validateWindowParam(req, _res, next) {
   ensure(isValidWindow(req.params.window), 'Invalid report window. Use daily, weekly, or monthly.');
+  next();
+}
+
+export function validateIdnoParam(req, _res, next) {
+  ensure(isValidIdno(req.params.idno), 'Invalid IDNO format.');
   next();
 }

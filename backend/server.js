@@ -6,6 +6,7 @@ import authRoutes from './routes/authRoutes.js';
 import supervisorRoutes from './routes/supervisorRoutes.js';
 import officerRoutes from './routes/officerRoutes.js';
 import agentRoutes from './routes/agentRoutes.js';
+import commonRoutes from './routes/commonRoutes.js';
 import { AppError, mapDatabaseError, notFound } from './utils/errors.js';
 import { getEnv } from './utils/env.js';
 import { securityMiddleware } from './middleware/security.js';
@@ -40,6 +41,7 @@ app.use('/auth', authRoutes);
 app.use('/supervisor', supervisorRoutes);
 app.use('/officer', officerRoutes);
 app.use('/agent', agentRoutes);
+app.use('/lookup', commonRoutes);
 
 app.use((_req, _res, next) => next(notFound('Route not found.')));
 

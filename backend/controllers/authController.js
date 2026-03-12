@@ -1,7 +1,7 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { query } from '../database/connection.js';
-import { unauthorized } from '../utils/errors.js';
+import { badRequest, forbidden, unauthorized } from '../utils/errors.js';
 import { getEnv } from '../utils/env.js';
 
 const env = getEnv();
@@ -32,6 +32,16 @@ export async function login(req, res) {
 
 export async function registerSupervisor(req, res) {
   const { name, email, password } = req.body;
+
+  const count = await query(`SELECT COUNT(*)::int AS supervisors FROM users WHERE role = 'supervisor'`);
+  if (count.rows[0].supervisors > 0) {
+    throw forbidden('Supervisor bootstrap is closed. Login with an existing supervisor account.');
+  }
+
+  if (!password || password.length < 8) {
+    throw badRequest('Password must be at least 8 characters.');
+  }
+
   const passwordHash = await bcrypt.hash(password, 12);
 
   const result = await query(

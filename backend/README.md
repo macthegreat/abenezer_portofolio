@@ -7,6 +7,14 @@ Production-oriented backend for:
 - automatic agent↔officer commission matching
 - period-based reporting (daily/weekly/monthly)
 
+## Core identity rule
+
+**IDNO (FIN) is globally unique** and is the primary identifier for person records.
+
+- `agent_submissions.idno` is unique globally
+- `registrations.idno` is unique globally
+- all app writes normalize IDNO to uppercase before saving
+
 ## What's production-ready now
 
 - Request validation middleware for all write endpoints and report windows
@@ -18,6 +26,7 @@ Production-oriented backend for:
 - Health and readiness endpoints (`/health`, `/ready`)
 - Graceful shutdown handling (`SIGINT`, `SIGTERM`)
 - Supervisor endpoint to update agent commission
+- Global IDNO lookup endpoint for all authenticated roles
 
 ## Quick start
 
@@ -51,13 +60,14 @@ Production-oriented backend for:
 
 ## API map
 
-- `POST /auth/register` - bootstrap supervisor account
+- `POST /auth/register` - bootstrap first supervisor (one-time only)
 - `POST /auth/login`
 
 Supervisor:
 - `POST /supervisor/create-officer`
 - `POST /supervisor/create-agent`
 - `PATCH /supervisor/agent/:agentId/commission`
+- `GET /supervisor/team`
 - `GET /supervisor/reports`
 
 Officer:
@@ -68,6 +78,9 @@ Agent:
 - `POST /agent/submit-person`
 - `GET /agent/matches`
 - `GET /agent/commission/:window(daily|weekly|monthly)`
+
+Shared (auth required):
+- `GET /lookup/idno/:idno`
 
 Ops:
 - `GET /health`
@@ -90,8 +103,9 @@ Known errors return:
 
 ## Matching logic
 
-When an officer creates a registration, the service checks `agent_submissions` by `idno`.
-If found, it inserts one row into `commission_matches` with that agent's configured `commission_per_person`.
+- When an officer creates a registration, the system attempts to match with existing agent submission by `idno`.
+- When an agent submits an `idno`, the system also attempts immediate matching against existing registrations.
+- Commission is created once, and duplicates are prevented by unique keys in `commission_matches`.
 
 ## Included frontend (new)
 
@@ -106,10 +120,11 @@ python3 -m http.server 4173
 ```
 
 Features:
-- login + supervisor bootstrap account creation
+- login + one-time supervisor bootstrap account creation
 - role-based dashboards for supervisor, officer, and agent
-- create officer/agent, update commission, run reports
+- create officer/agent, update commission, run reports, list team
 - register users, submit leads, view matches/commission
+- global IDNO status lookup panel
 - API response log panel for quick debugging
 
 Set the **API Base URL** field in the UI to your backend URL (for example `http://localhost:4000`).

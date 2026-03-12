@@ -4,7 +4,8 @@ import {
   validateLogin,
   validateRegistration,
   validateCommissionUpdate,
-  validateWindowParam
+  validateWindowParam,
+  validateIdnoParam
 } from '../middleware/validate.js';
 
 function runMiddleware(middleware, req) {
@@ -47,5 +48,17 @@ test('validateCommissionUpdate accepts non-negative numbers', async () => {
 test('validateWindowParam rejects invalid period', async () => {
   await assert.rejects(() => runMiddleware(validateWindowParam, {
     params: { window: 'yearly' }
+  }));
+});
+
+test('validateIdnoParam accepts alphanumeric IDNO', async () => {
+  await assert.doesNotReject(() => runMiddleware(validateIdnoParam, {
+    params: { idno: 'FIN-12345' }
+  }));
+});
+
+test('validateIdnoParam rejects unsupported symbols', async () => {
+  await assert.rejects(() => runMiddleware(validateIdnoParam, {
+    params: { idno: 'FIN@123' }
   }));
 });

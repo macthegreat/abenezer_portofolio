@@ -23,3 +23,14 @@ test('maps registration idno unique violation to readable message', () => {
   assert.equal(error.statusCode, 409);
   assert.equal(error.message, 'A registration with this IDNO already exists.');
 });
+
+test('maps agent submission idno unique violation to readable message', () => {
+  const error = mapDatabaseError({
+    code: '23505',
+    constraint: 'agent_submissions_idno_key',
+    detail: 'Key (idno)=(FIN1234) already exists.'
+  });
+
+  assert.equal(error.statusCode, 409);
+  assert.equal(error.message, 'This IDNO has already been submitted by another agent.');
+});

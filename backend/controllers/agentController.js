@@ -1,5 +1,5 @@
-import { query } from '../database/connection.js';
-import { reportWindowSql } from '../services/commissionService.js';
+import { query, withTransaction } from '../database/connection.js';
+import { createCommissionMatchForSubmission, reportWindowSql } from '../services/commissionService.js';
 import { forbidden } from '../utils/errors.js';
 
 async function findAgentByUserId(userId) {
@@ -20,14 +20,24 @@ export async function submitPerson(req, res) {
 
   const normalizedIdno = idno.trim().toUpperCase();
 
-  const submission = await query(
-    `INSERT INTO agent_submissions (agent_id, full_name, idno)
-     VALUES ($1, $2, $3)
-     RETURNING *`,
-    [agent.id, fullName.trim(), normalizedIdno]
-  );
+  const result = await withTransaction(async (client) => {
+    const submission = await client.query(
+      `INSERT INTO agent_submissions (agent_id, full_name, idno)
+       VALUES ($1, $2, $3)
+       RETURNING *`,
+      [agent.id, fullName.trim(), normalizedIdno]
+    );
 
-  return res.status(201).json(submission.rows[0]);
+    const match = await createCommissionMatchForSubmission(
+      submission.rows[0].id,
+      normalizedIdno,
+      client
+    );
+
+    return { submission: submission.rows[0], match };
+  });
+
+  return res.status(201).json(result);
 }
 
 export async function matches(req, res) {
