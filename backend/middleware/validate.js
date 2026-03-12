@@ -23,7 +23,7 @@ function isValidWindow(value) {
 }
 
 function isValidIdno(value) {
-  return typeof value === 'string' && /^[A-Za-z0-9-]{3,50}$/.test(value.trim());
+  return typeof value === 'string' && /^\d{12}$/.test(value.trim());
 }
 
 function ensure(condition, message, details) {
@@ -71,14 +71,14 @@ export function validateCommissionUpdate(req, _res, next) {
 export function validateAgentSubmission(req, _res, next) {
   const { fullName, idno } = req.body;
   ensure(isNonEmptyString(fullName, 1, 120), 'Full name must be between 1 and 120 characters.');
-  ensure(isValidIdno(idno), 'IDNO must be 3-50 chars and only letters, numbers, or hyphen.');
+  ensure(isValidIdno(idno), 'IDNO(FIN) must be exactly 12 digits.');
   next();
 }
 
 export function validateRegistration(req, _res, next) {
   const { fullName, idno, amount } = req.body;
   ensure(isNonEmptyString(fullName, 1, 120), 'Full name must be between 1 and 120 characters.');
-  ensure(isValidIdno(idno), 'IDNO must be 3-50 chars and only letters, numbers, or hyphen.');
+  ensure(isValidIdno(idno), 'IDNO(FIN) must be exactly 12 digits.');
   ensure(isValidAmount(amount), 'Amount must be a number greater than or equal to 1000.');
   next();
 }
@@ -89,6 +89,6 @@ export function validateWindowParam(req, _res, next) {
 }
 
 export function validateIdnoParam(req, _res, next) {
-  ensure(isValidIdno(req.params.idno), 'Invalid IDNO format.');
+  ensure(isValidIdno(req.params.idno), 'Invalid IDNO format. It must be exactly 12 digits.');
   next();
 }

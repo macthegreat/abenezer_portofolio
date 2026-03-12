@@ -167,7 +167,7 @@ function renderOfficer() {
       <h3>Register user</h3>
       <div class="grid three">
         ${makeInput('Full name', 'regName', 'text', 'Customer Name')}
-        ${makeInput('IDNO / FIN', 'regIdno', 'text', 'FIN1234')}
+        ${makeInput('IDNO / FIN', 'regIdno', 'text', '123456789012')}
         ${makeInput('Amount', 'regAmount', 'number', '1000')}
       </div>
       <button id="registerUserBtn">Submit registration</button>
@@ -208,7 +208,7 @@ function renderAgent() {
       <h3>Submit potential client</h3>
       <div class="grid two">
         ${makeInput('Full name', 'leadName', 'text', 'Client Name')}
-        ${makeInput('IDNO / FIN', 'leadIdno', 'text', 'FIN1234')}
+        ${makeInput('IDNO / FIN', 'leadIdno', 'text', '123456789012')}
       </div>
       <button id="submitLeadBtn">Submit lead</button>
     </div>

@@ -51,14 +51,14 @@ test('validateWindowParam rejects invalid period', async () => {
   }));
 });
 
-test('validateIdnoParam accepts alphanumeric IDNO', async () => {
+test('validateIdnoParam accepts 12-digit numeric IDNO', async () => {
   await assert.doesNotReject(() => runMiddleware(validateIdnoParam, {
-    params: { idno: 'FIN-12345' }
+    params: { idno: '123456789012' }
   }));
 });
 
-test('validateIdnoParam rejects unsupported symbols', async () => {
+test('validateIdnoParam rejects non-digit IDNO values', async () => {
   await assert.rejects(() => runMiddleware(validateIdnoParam, {
-    params: { idno: 'FIN@123' }
+    params: { idno: '1234ABCD9012' }
   }));
 });

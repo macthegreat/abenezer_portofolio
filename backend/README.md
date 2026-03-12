@@ -9,10 +9,10 @@ Production-oriented backend for:
 
 ## Core identity rule
 
-**IDNO (FIN) is globally unique** and is the primary identifier for person records.
+**IDNO (FIN) is globally unique, numeric-only, and exactly 12 digits**; it is the primary identifier for person records.
 
-- `agent_submissions.idno` is unique globally
-- `registrations.idno` is unique globally
+- `agent_submissions.idno` is unique globally and must match `^\d{12}$`
+- `registrations.idno` is unique globally and must match `^\d{12}$`
 - all app writes normalize IDNO to uppercase before saving
 
 ## What's production-ready now
@@ -105,7 +105,7 @@ Known errors return:
 
 - When an officer creates a registration, the system attempts to match with existing agent submission by `idno`.
 - When an agent submits an `idno`, the system also attempts immediate matching against existing registrations.
-- Matching is **IDNO(FIN)-only**. `full_name` is stored for display/audit and is not used for matching, so spelling mistakes in names do not block matching.
+- Matching is **IDNO(FIN)-only**. IDNO must be exactly 12 digits. `full_name` is stored for display/audit and is not used for matching, so spelling mistakes in names do not block matching.
 - Commission is created once, and duplicates are prevented by unique keys in `commission_matches`.
 
 ## Included frontend (new)
