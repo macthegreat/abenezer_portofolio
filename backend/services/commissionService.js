@@ -1,3 +1,4 @@
+// IDNO-only matching rule: never match by full_name.
 import { query } from '../database/connection.js';
 
 export async function createCommissionMatchForRegistration(registrationId, idno, dbClient = null) {

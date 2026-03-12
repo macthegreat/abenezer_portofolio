@@ -34,7 +34,7 @@ export async function submitPerson(req, res) {
       client
     );
 
-    return { submission: submission.rows[0], match };
+    return { submission: submission.rows[0], match, matchingKey: match ? 'idno' : null };
   });
 
   return res.status(201).json(result);

@@ -28,7 +28,7 @@ export async function registerUser(req, res) {
       client
     );
 
-    return { registration: registration.rows[0], match };
+    return { registration: registration.rows[0], match, matchingKey: match ? 'idno' : null };
   });
 
   return res.status(201).json(result);

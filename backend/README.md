@@ -105,6 +105,7 @@ Known errors return:
 
 - When an officer creates a registration, the system attempts to match with existing agent submission by `idno`.
 - When an agent submits an `idno`, the system also attempts immediate matching against existing registrations.
+- Matching is **IDNO(FIN)-only**. `full_name` is stored for display/audit and is not used for matching, so spelling mistakes in names do not block matching.
 - Commission is created once, and duplicates are prevented by unique keys in `commission_matches`.
 
 ## Included frontend (new)

@@ -70,14 +70,14 @@ export function validateCommissionUpdate(req, _res, next) {
 
 export function validateAgentSubmission(req, _res, next) {
   const { fullName, idno } = req.body;
-  ensure(isNonEmptyString(fullName, 2, 120), 'Full name must be between 2 and 120 characters.');
+  ensure(isNonEmptyString(fullName, 1, 120), 'Full name must be between 1 and 120 characters.');
   ensure(isValidIdno(idno), 'IDNO must be 3-50 chars and only letters, numbers, or hyphen.');
   next();
 }
 
 export function validateRegistration(req, _res, next) {
   const { fullName, idno, amount } = req.body;
-  ensure(isNonEmptyString(fullName, 2, 120), 'Full name must be between 2 and 120 characters.');
+  ensure(isNonEmptyString(fullName, 1, 120), 'Full name must be between 1 and 120 characters.');
   ensure(isValidIdno(idno), 'IDNO must be 3-50 chars and only letters, numbers, or hyphen.');
   ensure(isValidAmount(amount), 'Amount must be a number greater than or equal to 1000.');
   next();
