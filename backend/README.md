@@ -129,3 +129,7 @@ Features:
 - API response log panel for quick debugging
 
 Set the **API Base URL** field in the UI to your backend URL (for example `http://localhost:4000`).
+
+## Deployment
+
+For exact step-by-step deployment on **Render (backend)** + **Vercel (frontend)**, see `../DEPLOYMENT.md`.
